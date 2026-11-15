@@ -1,0 +1,6 @@
+{
+  "ibex": {
+    "url": "https://github.com/lowRISC/ibex.git",
+    "revision": "af456e25575013668ab56725268126f6b0feca35"
+  }
+}

@@ -1,0 +1,2 @@
+The build script registers the selected Ibex checkout explicitly. Do not also
+discover it while recursively scanning the local setup directory.

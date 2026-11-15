@@ -1,0 +1,51 @@
+CAPI=2:
+name: local:secureboot:minimal_soc:0.1
+description: Ibex RAM, LED and UART bring-up on Arty A7-100T
+filesets:
+  rtl:
+    depend:
+      - lowrisc:ibex:ibex_top
+    files:
+      - rtl/uart_tx.sv
+      - rtl/ibex_minimal_soc.sv
+    file_type: systemVerilogSource
+  fpga:
+    files:
+      - rtl/arty_top.sv
+    file_type: systemVerilogSource
+  constraints:
+    files:
+      - constraints/arty_a7_100.xdc
+    file_type: xdc
+  sim:
+    files:
+      - sim/sim_main.cpp
+    file_type: cppSource
+parameters:
+  MEM_FILE:
+    datatype: str
+    paramtype: vlogparam
+    default: program.mem
+targets:
+  default:
+    filesets: [rtl]
+    toplevel: ibex_minimal_soc
+    parameters: [MEM_FILE]
+  sim:
+    default_tool: verilator
+    filesets: [rtl, sim]
+    toplevel: ibex_minimal_soc
+    parameters: [MEM_FILE]
+    tools:
+      verilator:
+        mode: cc
+        verilator_options: ["-Wno-fatal", "--unroll-count", "72"]
+        make_options: ["-j2"]
+  synth:
+    default_tool: vivado
+    filesets: [rtl, fpga, constraints]
+    toplevel: arty_top
+    parameters: [MEM_FILE]
+    tools:
+      vivado:
+        part: xc7a100tcsg324-1
